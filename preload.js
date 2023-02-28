@@ -6,4 +6,5 @@ contextBridge.exposeInMainWorld("functions", {
 		ipcRenderer.invoke("handleBackup", srcPath, dstPath),
 	setCron: (cronTab, srcPatch, dstPath) =>
 		ipcRenderer.invoke("setCron", cronTab, srcPatch, dstPath),
+	selectFolder: () => ipcRenderer.invoke("selectFolder"),
 })

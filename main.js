@@ -1,34 +1,40 @@
 const { app, BrowserWindow, Tray, Menu } = require("electron")
 const path = require("path")
-
 const handleFunctions = require("./handleFunctions")
 
+//aplicação minimizada na bandeja do sistema
 let tray = null
 
+//cria a janela da aplicação
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		icon: path.join(__dirname + "/public/icon.png"),
-		width: 400,
-		height: 300,
-
+		width: 500,
+		height: 350,
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 		},
 	})
 
-	// and load the index.html of the app.
+	// carrega o arquivo index.html
 	mainWindow.loadFile("index.html")
-
+	//oculta a barra de menu padrão
 	mainWindow.setMenu(null)
-
-	// Open the DevTools.
-	// mainWindow.webContents.openDevTools()
+	// Abre o DevTools.
+	mainWindow.webContents.openDevTools()
 	mainWindow.on("close", (e) => {
 		if (tray === null) {
 			e.preventDefault()
-			tray = new Tray(path.join(__dirname, "/public/icon.png"))
 			mainWindow.hide()
+
+			tray = new Tray(path.join(__dirname, "/public/icon.png"))
+
+			tray.on("double-click", () => {
+				tray.destroy()
+				tray = null
+				mainWindow.show()
+			})
 
 			const contextMenu = Menu.buildFromTemplate([
 				{
@@ -50,6 +56,8 @@ const createWindow = () => {
 				},
 			])
 			tray.setContextMenu(contextMenu)
+		} else {
+			app.quit()
 		}
 	})
 }
@@ -59,9 +67,4 @@ app.whenReady().then(() => {
 		createWindow()
 	}
 	handleFunctions()
-})
-app.on("window-all-closed", () => {
-	if (process.platform !== "darwin") {
-		app.quit()
-	}
 })

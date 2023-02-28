@@ -23,6 +23,35 @@ let dstPath
 let cron
 
 //functions
+const selectBackupFolder = document
+	.getElementById("backupSelectFolderBtn")
+	.addEventListener("click", async () => {
+		try {
+			const response = await window.functions.selectFolder()
+			document.getElementById("srcPath").value = response.filePaths[0]
+			srcPath = document.getElementById("srcPath").value
+			dstPath = document.getElementById("dstPath").value
+			localStorage.setItem("srcPath", srcPath)
+			localStorage.setItem("dstPath", dstPath)
+		} catch (e) {
+			console.log(e)
+		}
+	})
+const selectDestinationFolder = document
+	.getElementById("destinationSelectFolder")
+	.addEventListener("click", async () => {
+		try {
+			const response = await window.functions.selectFolder()
+			document.getElementById("dstPath").value = response.filePaths[0]
+			srcPath = document.getElementById("srcPath").value
+			dstPath = document.getElementById("dstPath").value
+			localStorage.setItem("srcPath", srcPath)
+			localStorage.setItem("dstPath", dstPath)
+		} catch (e) {
+			console.log("error")
+		}
+	})
+
 const saveData = document.addEventListener("input", () => {
 	srcPath = document.getElementById("srcPath").value
 	dstPath = document.getElementById("dstPath").value
