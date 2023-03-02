@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'self'; script-src 'self'" />
+		<link rel="icon" type="image/x-icon" href="/assets/icon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./styles/style.css"
+			media="screen" />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./styles/global.css"
+			media="screen" />
+
+		<title>Simple backup</title>
+	</head>
+	<body>
+		<main class="app">
+			<div class="foldersInputContainer">
+				<div>
+					<span> Fonte: </span>
+					<input type="text" id="srcPath" disabled />
+					<button id="selectBackupFolder">Selecionar pasta</button>
+				</div>
+				<div>
+					<span> Destino: </span>
+					<input type="text" id="dstPath" disabled />
+					<button id="selectDestinationFolder">Selecionar pasta</button>
+				</div>
+			</div>
+			<div>
+				<span id="backupStatus">ㅤ</span>
+			</div>
+			<div>
+				<button id="backupBtn" role="button">Fazer backup agora</button>
+			</div>
+		</main>
+
+		<script src="./renderer.js"></script>
+	</body>
+</html>

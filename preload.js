@@ -1,10 +1,17 @@
 const { contextBridge, ipcRenderer } = require("electron")
 
+//unidirecional
 contextBridge.exposeInMainWorld("functions", {
-	ping: () => ipcRenderer.invoke("ping"),
+	selectFolder: () => ipcRenderer.invoke("selectFolder"),
+	savePath: (srcPath, dstPath) =>
+		ipcRenderer.invoke("savePath", srcPath, dstPath),
 	handleBackup: (srcPath, dstPath) =>
 		ipcRenderer.invoke("handleBackup", srcPath, dstPath),
-	setCron: (cronTab, srcPatch, dstPath) =>
-		ipcRenderer.invoke("setCron", cronTab, srcPatch, dstPath),
-	selectFolder: () => ipcRenderer.invoke("selectFolder"),
+})
+
+//do principal para o renderizador
+contextBridge.exposeInMainWorld("electronAPI", {
+	backupStatus: (callback) => ipcRenderer.on("backupStatus", callback),
+	backupFinalized: (callback) => ipcRenderer.on("backupFinalized", callback),
+	paths: (callback) => ipcRenderer.on("paths", callback),
 })

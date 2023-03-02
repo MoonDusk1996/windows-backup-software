@@ -1,70 +1,24 @@
-const { app, BrowserWindow, Tray, Menu } = require("electron")
-const path = require("path")
-const handleFunctions = require("./handleFunctions")
+const { app, BrowserWindow, ipcMain } = require("electron")
+const settings = require("electron-settings")
+const mainWindow = require("./src/main/windows/mainWindow")
+const selectFolder = require("./src/controllers/selectFolder")
+const handleBackup = require("./src/controllers/handleBackup")
 
-//aplicação minimizada na bandeja do sistema
-let tray = null
-
-//cria a janela da aplicação
-const createWindow = () => {
-	// Create the browser window.
-	const mainWindow = new BrowserWindow({
-		icon: path.join(__dirname + "/public/icon.png"),
-		width: 500,
-		height: 350,
-		webPreferences: {
-			preload: path.join(__dirname, "preload.js"),
-		},
-	})
-
-	// carrega o arquivo index.html
-	mainWindow.loadFile("index.html")
-	//oculta a barra de menu padrão
-	mainWindow.setMenu(null)
-	// Abre o DevTools.
-	mainWindow.webContents.openDevTools()
-	mainWindow.on("close", (e) => {
-		if (tray === null) {
-			e.preventDefault()
-			mainWindow.hide()
-
-			tray = new Tray(path.join(__dirname, "/public/icon.png"))
-
-			tray.on("double-click", () => {
-				tray.destroy()
-				tray = null
-				mainWindow.show()
-			})
-
-			const contextMenu = Menu.buildFromTemplate([
-				{
-					label: "Abrir",
-					type: "normal",
-					click: () => {
-						tray.destroy()
-						tray = null
-						mainWindow.show()
-					},
-				},
-				{
-					label: "Sair",
-					type: "normal",
-					click: () => {
-						tray.destroy()
-						app.quit()
-					},
-				},
-			])
-			tray.setContextMenu(contextMenu)
-		} else {
-			app.quit()
-		}
-	})
-}
-
-app.whenReady().then(() => {
+//Executa quando abrir a aplicação
+app.whenReady().then(async () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
-		createWindow()
+		//carrega configurações
+		const srcPath = await settings.get("srcPath").then((data) => data)
+		const dstPath = await settings.get("dstPath").then((data) => data)
+		const cron = await settings.get("cron").then((data) => data)
+
+		//cria a janela e carrega as funções
+		mainWindow(srcPath, dstPath, cron)
+		ipcMain.handle("selectFolder", selectFolder)
+		ipcMain.handle("savePath", async (e, srcPath, dstPath) => {
+			await settings.set("srcPath", srcPath)
+			await settings.set("dstPath", dstPath)
+		})
+		ipcMain.handle("handleBackup", handleBackup)
 	}
-	handleFunctions()
 })
