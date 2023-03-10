@@ -27,7 +27,7 @@ let tray = null
 
 module.exports = async function toTray(event, srcPath, dstPath, cron) {
 	if (tray !== null) return
-	// event.preventDefault()
+	event.preventDefault()
 	const mainWindow = BrowserWindow.getAllWindows()[0]
 	const setedBackupNotfication = new Notification({
 		title: "Backup definido",
