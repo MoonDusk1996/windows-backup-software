@@ -29,7 +29,13 @@ Execute a aplicação
   npm run start
 ```
 
-## Funcionalidades
+## Screenshots
+![App Screenshot](./assets/BASS.png)
+
+![App Screenshot](./assets/NSS.png)
+
+
+## Screenshots
 
 - Backups automáticos:
 
