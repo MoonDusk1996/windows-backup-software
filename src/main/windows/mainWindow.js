@@ -6,9 +6,9 @@ module.exports = async function createWindow(srcPath, dstPath, cron) {
 	// configurações da janela
 	const windowRender = {
 		icon: path.join(__dirname + "/assets/icon.ico"),
-		width: 500 * 3,
-		height: 300 * 3,
-		resizable: true,
+		width: 500,
+		height: 300,
+		resizable: false,
 		autoHideMenuBar: true,
 		webPreferences: {
 			enableRemoteModule: true,
@@ -25,7 +25,7 @@ module.exports = async function createWindow(srcPath, dstPath, cron) {
 	mainWindow.webContents.send("paths", srcPath, dstPath)
 
 	// abre o DevTools.
-	mainWindow.webContents.openDevTools()
+	// mainWindow.webContents.openDevTools()
 
 	// minimiza para a bandeja do sistema quando sair
 	mainWindow.on("close", (event) => toTray(event, srcPath, dstPath, cron))
