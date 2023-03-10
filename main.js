@@ -4,16 +4,26 @@ const mainWindow = require("./src/main/windows/mainWindow")
 const selectFolder = require("./src/controllers/selectFolder")
 const handleBackup = require("./src/controllers/handleBackup")
 
-//Executa quando abrir a aplicação
+// executa quando abrir a aplicação
+
 app.whenReady().then(async () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
-		//carrega configurações
-		const srcPath = await settings.get("srcPath").then((data) => data)
-		const dstPath = await settings.get("dstPath").then((data) => data)
-		const cron = await settings.get("cron").then((data) => data)
+		// carrega configurações do usuário ou padrões
+		const srcPath = (await settings.get("srcPath").then((data) => data))
+			? await settings.get("srcPath").then((data) => data)
+			: "C://Users/Public"
 
-		//cria a janela e carrega as funções
+		const dstPath = (await settings.get("dstPath").then((data) => data))
+			? await settings.get("dstPath").then((data) => data)
+			: "C://Backup"
+
+		const cron = (await settings.get("cron").then((data) => data))
+			? await settings.get("cron").then((data) => data)
+			: "0 0 * * *"
+
+		// cria a janela e carrega as funções
 		mainWindow(srcPath, dstPath, cron)
+		// cria o handle para as funções
 		ipcMain.handle("selectFolder", selectFolder)
 		ipcMain.handle("savePath", async (e, srcPath, dstPath) => {
 			await settings.set("srcPath", srcPath)

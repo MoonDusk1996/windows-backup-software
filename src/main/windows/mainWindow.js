@@ -3,28 +3,30 @@ const path = require("path")
 const toTray = require("../tray/toTray")
 
 module.exports = async function createWindow(srcPath, dstPath, cron) {
-	// cria a janela
-	const mainWindow = new BrowserWindow({
-		icon: path.join(process.cwd() + "/assets/icon.ico"),
-		width: 500,
-		height: 300,
-		resizable: false,
+	// configurações da janela
+	const windowRender = {
+		icon: path.join(__dirname + "/assets/icon.ico"),
+		width: 500 * 3,
+		height: 300 * 3,
+		resizable: true,
+		autoHideMenuBar: true,
 		webPreferences: {
-			preload: path.join(process.cwd() + "/preload.js"),
+			enableRemoteModule: true,
 			nodeIntegration: true,
+			preload: path.join(process.cwd() + "/preload.js"),
 		},
-	})
+	}
+
+	// cria a janela passando as configurações como parâmetro
+	const mainWindow = new BrowserWindow(windowRender)
 
 	// carrega o arquivo index.html
 	await mainWindow.loadFile("./src/renderer/index.html")
 	mainWindow.webContents.send("paths", srcPath, dstPath)
 
-	//oculta a barra de menu padrão
-	mainWindow.setMenu(null)
-
 	// abre o DevTools.
-	// mainWindow.webContents.openDevTools()
+	mainWindow.webContents.openDevTools()
 
-	//ação quando fechar a janela
-	mainWindow.on("close", (e) => toTray(e))
+	// minimiza para a bandeja do sistema quando sair
+	mainWindow.on("close", (event) => toTray(event, srcPath, dstPath, cron))
 }

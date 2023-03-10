@@ -1,41 +1,44 @@
 const { app, BrowserWindow, Tray, Menu, Notification } = require("electron")
 const path = require("path")
 const settings = require("electron-settings")
-const cron = require("node-cron")
+const schedule = require("node-cron")
 const handleBackup = require("../../controllers/handleBackup")
 
-let tray = null
 let cronJob = null
+let tray = null
 
-;(async function teste() {
-	const cronTime = await settings.get("cron").then((data) => data)
-	const srcPath = await settings.get("srcPath").then((data) => data)
-	const dstPath = await settings.get("dstPath").then((data) => data)
-	cronJob = cron.schedule(cronTime, async () => {
-		await handleBackup(null, srcPath, dstPath)
-	})
-})()
+	; (async function cronTask() {
+		const srcPath = (await settings.get("srcPath").then((data) => data))
+			? await settings.get("srcPath").then((data) => data)
+			: ""
 
-module.exports = async function toTray(e) {
+		const dstPath = (await settings.get("dstPath").then((data) => data))
+			? await settings.get("dstPath").then((data) => data)
+			: ""
+
+		const cron = (await settings.get("cron").then((data) => data))
+			? await settings.get("cron").then((data) => data)
+			: "0 0 * * *"
+
+		return schedule.schedule(cron, async () => {
+			handleBackup(null, srcPath, dstPath)
+		})
+	})()
+
+module.exports = async function toTray(event, srcPath, dstPath, cron) {
 	if (tray !== null) return
-	e.preventDefault()
+	// event.preventDefault()
 	const mainWindow = BrowserWindow.getAllWindows()[0]
-
-	const cronTime = await settings.get("cron").then((data) => data)
-	const srcPath = await settings.get("srcPath").then((data) => data)
-	const dstPath = await settings.get("dstPath").then((data) => data)
-
 	const setedBackupNotfication = new Notification({
 		title: "Backup definido",
-		body: `Backup definido para ${
-			cronTime === "0 0 * * *"
-				? "todos os dias"
-				: cronTime === "0 0 * * 0"
+		body: `Backup definido para ${cron === "0 0 * * *"
+			? "todos os dias"
+			: cron === "0 0 * * 0"
 				? "todas os domingos"
-				: cronTime === "0 0 1 * *"
-				? "todo dia 1°"
-				: null
-		} às 00:00`,
+				: cron === "0 0 1 * *"
+					? "todo dia 1°"
+					: null
+			} às 00:00`,
 	})
 	const trayMenu = [
 		{
@@ -48,7 +51,7 @@ module.exports = async function toTray(e) {
 						if (cronJob !== null) {
 							await cronJob.stop()
 						}
-						cronJob = cron.schedule("0 0 * * *", async () => {
+						cronJob = schedule.schedule("0 0 * * *", async () => {
 							handleBackup(null, srcPath, dstPath)
 						})
 
@@ -64,7 +67,7 @@ module.exports = async function toTray(e) {
 						if (cronJob !== null) {
 							await cronJob.stop()
 						}
-						cronJob = cron.schedule("0 0 * * 0", async () => {
+						cronJob = schedule.schedule("0 0 * * 0", async () => {
 							handleBackup(null, srcPath, dstPath)
 						})
 
@@ -80,7 +83,7 @@ module.exports = async function toTray(e) {
 						if (cronJob !== null) {
 							await cronJob.stop()
 						}
-						cronJob = cron.schedule("0 0 1 * *", async () => {
+						cronJob = schedule.schedule("0 0 1 * *", async () => {
 							handleBackup(null, srcPath, dstPath)
 						})
 						await settings.set("cron", "0 0 1 * *")
@@ -113,7 +116,7 @@ module.exports = async function toTray(e) {
 	]
 	tray = new Tray(path.join(process.cwd() + "./assets/icon.png"))
 	const contextMenu = Menu.buildFromTemplate(trayMenu)
-	switch (cronTime) {
+	switch (cron) {
 		case "0 0 * * *":
 			contextMenu.items[0].submenu.items[0].checked = true
 

@@ -1,5 +1,11 @@
 {
 	"name": "simple-backup",
+	"build": {
+		"appId": "com.example.app",
+		"mac": {
+			"category": "tools"
+		}
+	},
 	"version": "1.0.0",
 	"main": "main.js",
 	"dependencies": {
@@ -72,21 +78,14 @@
 	},
 	"scripts": {
 		"test": "jest",
-		"start": "electron-forge start",
-		"dev": "electron .",
-		"package": "electron-forge package",
-		"make": "electron-forge make"
+		"start": "electron ."
 	},
 	"keywords": [],
 	"author": "Dusk",
 	"license": "ISC",
 	"description": "A simple backup cron",
 	"devDependencies": {
-		"@electron-forge/cli": "^6.0.5",
-		"@electron-forge/maker-deb": "^6.0.4",
-		"@electron-forge/maker-rpm": "^6.0.4",
-		"@electron-forge/maker-squirrel": "^6.0.4",
-		"@electron-forge/maker-zip": "^6.0.4",
-		"electron": "^22.2.0"
+		"electron": "^22.2.0",
+		"electron-builder": "^23.6.0"
 	}
 }
