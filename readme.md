@@ -6,17 +6,39 @@ Simple Backup é uma aplicação para Windows que busca trazer, de forma simples
 
 ## Instalação
 
-Primeiramente, faça o download do Simple Backup, instale a aplicação em seu computador e execute o arquivo. Após a instalação, você verá um menu como na figura abaixo. Basta selecionar os diretórios desejados e fazer o backup.
+Clone este repositório
+
+```bash
+  git clone https://github.com/MoonDusk1996/windows-backup-software
+```
+
+Navegue até o ditretorio da aplicação
+
+```bash
+  cd windows-backup-software
+```
+
+Inicialize a aplicação
+
+```bash
+  npm i
+```
+Execute a aplicação
+
+```bash
+  npm run start
+```
+
 ## Funcionalidades
 
 - Backups automáticos:
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](./assets//BASS.png)
 
 - Notificações de backups:
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](./assets/NSS.png)
 
 - Segundo plano:
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](./assets/SP.png)
 
 
 

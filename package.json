@@ -4,6 +4,10 @@
 		"appId": "com.example.app",
 		"mac": {
 			"category": "tools"
+		},
+		"win": {
+			"target": "squirrel",
+			"icon": "icon.png"
 		}
 	},
 	"version": "1.0.0",

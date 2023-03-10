@@ -5,7 +5,7 @@ const toTray = require("../tray/toTray")
 module.exports = async function createWindow(srcPath, dstPath, cron) {
 	// configurações da janela
 	const windowRender = {
-		icon: path.join(__dirname + "/assets/icon.ico"),
+		icon: path.join(process.cwd() + "/assets/icon.ico"),
 		width: 500,
 		height: 300,
 		resizable: false,
