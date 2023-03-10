@@ -32,13 +32,10 @@ Execute a aplicação
 ## Funcionalidades
 
 - Backups automáticos:
-![App Screenshot](./assets//BASS.png)
 
 - Notificações de backups:
-![App Screenshot](./assets/NSS.png)
 
 - Segundo plano:
-![App Screenshot](./assets/SP.png)
 
 
 
