@@ -35,7 +35,7 @@ Execute a aplicação
 ![App Screenshot](./assets/NSS.png)
 
 
-## Screenshots
+## Funcionalidades
 
 - Backups automáticos:
 
